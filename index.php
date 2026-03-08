@@ -1,6 +1,3 @@
-<?php
-$browser = get_browser(null, true);
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,21 +15,23 @@ $browser = get_browser(null, true);
     </div>
 
     <script>
+        const ua = navigator.userAgent;
+        const isFirefox = /Firefox/i.test(ua);
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(ua);
+
         let chars = ["W", "e", "l", "c", "o", "m", "e", " ", "t", "o", "<br>", "w", "o", "o", "d", "y", ".", "p", "i", "z", "z", "a", "<span class=\"blink\">_</span>"];
-        let chars_navbar = ["<?php if ($browser["browser"] != "Firefox" AND $browser["ismobiledevice"] != 1) { echo '🌈-';} else if ($browser["browser"] == "Firefox" AND $browser["ismobiledevice"] != 1) { echo '🌈 '; } else { echo '';} ?>W", "e", "l", "c", "o", "m", "e", "<?php if ($browser["ismobiledevice"] == 1 OR $browser["browser"] != "Firefox") { echo '-'; } else { echo ' '; } ?>", "t", "o", "<?php if ($browser["ismobiledevice"] == 1 OR $browser["browser"] != "Firefox") { echo '-'; } else { echo ' '; } ?>", "w", "o", "o", "d", "y", ".", "p", "i", "z", "z", "a", "!"];
+
+        const rainbowPrefix = (!isMobile && !isFirefox) ? '🌈-' : (!isMobile && isFirefox) ? '🌈 ' : '';
+        const separator = (isMobile || !isFirefox) ? '-' : ' ';
+
+        let chars_navbar = [rainbowPrefix + "W", "e", "l", "c", "o", "m", "e", separator, "t", "o", separator, "w", "o", "o", "d", "y", ".", "p", "i", "z", "z", "a", "!"];
+
         let index = 0;
         let x = 0;
         let navbarText = "";
         let titleText = "";
 
-        <?php
-        if ($browser["ismobiledevice"] == 1) {
-            echo 'const addText = "-"';
-        } else {
-            echo 'const addText = "➖"';
-        }
-        ?>
-
+        const addText = isMobile ? "-" : "➖";
 
         function getRndInteger(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
